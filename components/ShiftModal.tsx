@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useAppContext } from '../contexts/AppContext';
-import { formatToYYYYMMDD } from '../utils/dateUtils';
-import { ICONS } from '../constants';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import { formatToYYYYMMDD } from '../utils/dateUtils.ts';
+import { ICONS } from '../constants.tsx';
 import { XCircle } from 'lucide-react';
 
 interface ShiftModalProps {

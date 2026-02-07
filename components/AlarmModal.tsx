@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from '../contexts/AppContext';
-import { Shift } from '../types';
-import { formatToYYYYMMDD } from '../utils/dateUtils';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import { Shift } from '../types.ts';
+import { formatToYYYYMMDD } from '../utils/dateUtils.ts';
 import { Trash2 } from 'lucide-react';
 
 interface AlarmModalProps {

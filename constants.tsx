@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Shift } from './types';
+import { Shift } from './types.ts';
 import { Sun, Cloud, Moon, Coffee, Briefcase, Bed, Zap, Star, Heart, BookOpen, PlusCircle } from 'lucide-react';
 
 export const DEFAULT_SHIFTS: Shift[] = [

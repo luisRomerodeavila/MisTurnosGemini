@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
-import { useAppContext } from '../contexts/AppContext';
-import { Shift } from '../types';
-import ShiftFormModal from './ShiftFormModal';
-import InputDialog from './InputDialog';
-import SyncModal from './SyncModal';
-import { ICONS } from '../constants';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import { Shift } from '../types.ts';
+import ShiftFormModal from './ShiftFormModal.tsx';
+import InputDialog from './InputDialog.tsx';
+import SyncModal from './SyncModal.tsx';
+import { ICONS } from '../constants.tsx';
 import { Plus, Edit, Trash2, ShieldCheck, Sun, Moon, Laptop } from 'lucide-react';
-import { BackupFrequency } from '../contexts/AppContext';
+import { BackupFrequency } from '../types.ts';
 
 const SettingsView: React.FC = () => {
   const { calendars, activeCalendar, addCalendar, renameCalendar, deleteCalendar, shifts, deleteShift, theme, setTheme, backupFrequency, setBackupFrequency } = useAppContext();

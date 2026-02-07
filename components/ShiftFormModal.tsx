@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Shift } from '../types';
-import { useAppContext } from '../contexts/AppContext';
-import ColorPicker from './ColorPicker';
-import IconPicker from './IconPicker';
-import { AVAILABLE_COLORS, ICONS } from '../constants';
+import { Shift } from '../types.ts';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import ColorPicker from './ColorPicker.tsx';
+import IconPicker from './IconPicker.tsx';
+import { AVAILABLE_COLORS, ICONS } from '../constants.tsx';
 
 interface ShiftFormModalProps {
   isOpen: boolean;

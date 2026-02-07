@@ -1,14 +1,14 @@
 
 import React, { useState, useMemo, useRef } from 'react';
-import { getDaysInMonth, isToday, formatToYYYYMMDD } from '../utils/dateUtils';
-import { useAppContext } from '../contexts/AppContext';
-import { Shift } from '../types';
-import ShiftModal from './ShiftModal';
-import NoteModal from './NoteModal';
-import AlarmModal from './AlarmModal';
-import PaintBar from './PaintBar';
-import ExportModal from './ExportModal';
-import ExportView from './ExportView';
+import { getDaysInMonth, isToday, formatToYYYYMMDD } from '../utils/dateUtils.ts';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import { Shift } from '../types.ts';
+import ShiftModal from './ShiftModal.tsx';
+import NoteModal from './NoteModal.tsx';
+import AlarmModal from './AlarmModal.tsx';
+import PaintBar from './PaintBar.tsx';
+import ExportModal from './ExportModal.tsx';
+import ExportView from './ExportView.tsx';
 import { ChevronLeft, ChevronRight, Brush, Trash2, Bell, Share2 } from 'lucide-react';
 
 declare var html2canvas: any;

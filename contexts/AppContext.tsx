@@ -1,27 +1,12 @@
 
+
+
+
+
 import React, { createContext, useContext } from 'react';
-import { Shift, AssignedShifts } from '../types';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { DEFAULT_SHIFTS } from '../constants';
-
-export interface HistoryEntry {
-  id: number;
-  date: string;
-  description: string;
-  type: 'add' | 'remove' | 'modify' | 'clear';
-}
-
-type Theme = 'light' | 'dark' | 'system';
-export type BackupFrequency = 'disabled' | 'daily' | 'weekly' | 'monthly';
-
-interface Calendar {
-  id: string;
-  name: string;
-  assignedShifts: AssignedShifts;
-  notes?: { [date: string]: string };
-  alarms?: { [date: string]: { [shiftId: string]: string } };
-  history?: HistoryEntry[];
-}
+import { Shift, AssignedShifts, Calendar, HistoryEntry, Theme, BackupFrequency } from '../types.ts';
+import { useLocalStorage } from '../hooks/useLocalStorage.ts';
+import { DEFAULT_SHIFTS } from '../constants.tsx';
 
 interface AppState {
   calendars: Calendar[];

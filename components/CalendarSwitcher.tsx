@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext } from '../contexts/AppContext.tsx';
 import { ChevronDown } from 'lucide-react';
 
 const CalendarSwitcher: React.FC = () => {

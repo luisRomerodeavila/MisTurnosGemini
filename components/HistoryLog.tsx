@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { useAppContext } from '../contexts/AppContext';
-import { HistoryEntry } from '../contexts/AppContext';
+import { useAppContext } from '../contexts/AppContext.tsx';
+import { HistoryEntry } from '../types.ts';
 import { PlusCircle, MinusCircle, RefreshCw, Trash2, Clock } from 'lucide-react';
 
 const ICONS_MAP: { [key in HistoryEntry['type']]: React.ReactNode } = {

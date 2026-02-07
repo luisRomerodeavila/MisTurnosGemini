@@ -1,10 +1,15 @@
 
+
+
+
+
 import React, { useState, useMemo } from 'react';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext } from '../contexts/AppContext.tsx';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import HistoryLog from './HistoryLog';
-import { getHexColor } from '../utils/colorUtils';
+import HistoryLog from './HistoryLog.tsx';
+import { getHexColor } from '../utils/colorUtils.ts';
+import { Shift } from '../types.ts';
 
 type ViewMode = 'monthly' | 'annual';
 
@@ -36,53 +41,90 @@ const StatisticsView: React.FC = () => {
   const { monthlyStats, monthlyDaysWorked } = useMemo(() => {
     const counts: { [key: string]: number } = {};
     shifts.forEach(s => counts[s.id] = 0);
-    let totalShifts = 0;
+    const workedDays = new Set<string>();
 
-    Object.entries(assignedShifts).forEach(([dateStr, dayShifts]) => {
-      const date = new Date(`${dateStr}T00:00:00`);
-      if (date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
+    const yearMonthPrefix = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`;
+
+    Object.entries(assignedShifts)
+      .filter(([dateStr]) => dateStr.startsWith(yearMonthPrefix))
+      .forEach(([dateStr, dayShifts]) => {
+        let hasShift = false;
         dayShifts.forEach(shiftId => {
           if (shiftId && counts[shiftId] !== undefined) {
             counts[shiftId]++;
-            totalShifts++;
+            hasShift = true;
           }
         });
-      }
-    });
+        if (hasShift) {
+          workedDays.add(dateStr);
+        }
+      });
+      
     const stats = shifts.map(s => ({ name: s.abbreviation, count: counts[s.id] }));
-    return { monthlyStats: stats, monthlyDaysWorked: Math.floor(totalShifts / 3) };
+    return { monthlyStats: stats, monthlyDaysWorked: workedDays.size };
   }, [currentDate, assignedShifts, shifts]);
   
   const { annualStats, annualDaysWorked } = useMemo(() => {
     const counts: { [key: string]: number } = {};
     shifts.forEach(s => counts[s.id] = 0);
-    let totalShifts = 0;
+    const workedDays = new Set<string>();
     
-    Object.entries(assignedShifts).forEach(([dateStr, dayShifts]) => {
-      const date = new Date(`${dateStr}T00:00:00`);
-      if (date.getFullYear() === currentDate.getFullYear()) {
+    const yearPrefix = `${currentDate.getFullYear()}`;
+
+    Object.entries(assignedShifts)
+      .filter(([dateStr]) => dateStr.startsWith(yearPrefix))
+      .forEach(([dateStr, dayShifts]) => {
+        let hasShift = false;
         dayShifts.forEach(shiftId => {
           if (shiftId && counts[shiftId] !== undefined) {
             counts[shiftId]++;
-            totalShifts++;
+            hasShift = true;
           }
         });
-      }
-    });
-    return { annualStats: counts, annualDaysWorked: Math.floor(totalShifts / 3) };
+        if(hasShift) {
+            workedDays.add(dateStr);
+        }
+      });
+    return { annualStats: counts, annualDaysWorked: workedDays.size };
   }, [currentDate, assignedShifts, shifts]);
 
   const monthlyShiftCombinations = useMemo(() => {
     const combinations: { [key: string]: number } = {};
-    Object.entries(assignedShifts).forEach(([dateStr, dayShifts]) => {
-        const date = new Date(`${dateStr}T00:00:00`);
-        if (date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
-            const key = dayShifts.filter(id => id !== null).map(id => shiftMap.get(id!)?.abbreviation || '?').join('/') || 'Día Libre';
-            combinations[key] = (combinations[key] || 0) + 1;
-        }
-    });
+    const yearMonthPrefix = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`;
+    
+    Object.entries(assignedShifts)
+      .filter(([dateStr]) => dateStr.startsWith(yearMonthPrefix))
+      .forEach(([, dayShifts]) => {
+          const key = dayShifts.filter(id => id !== null).map(id => shiftMap.get(id!)?.abbreviation || '?').join('/');
+          if (key) { // Ensure we don't count empty days
+             combinations[key] = (combinations[key] || 0) + 1;
+          }
+      });
     return Object.entries(combinations).sort((a, b) => b[1] - a[1]);
   }, [currentDate, assignedShifts, shiftMap]);
+  
+  const annualDisplayStats = useMemo(() => {
+    const shiftStats: ({
+        type: 'shift';
+        shift: Shift;
+        count: number;
+    })[] = shifts
+      .map(shift => ({
+        type: 'shift' as const,
+        shift: shift,
+        count: annualStats[shift.id] || 0,
+      }))
+      .filter(item => item.count > 0); // Only show shifts that were worked
+  
+    // Fix: Create a union type array for shift stats and total stats
+    const totalStat = {
+      type: 'total' as const,
+      shift: null,
+      count: annualDaysWorked,
+    };
+    return [...shiftStats, totalStat];
+  }, [annualStats, annualDaysWorked, shifts]);
+
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -159,20 +201,25 @@ const StatisticsView: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
-              {Object.entries(annualStats).map(([shiftId, count]) => {
-                  const shift = shiftMap.get(shiftId);
-                  if (!shift) return null;
-                  return (
-                      <div key={shiftId} className={`p-3 rounded-lg ${shift.color} text-white`}>
-                          <p className="font-bold text-2xl">{count}</p>
-                          <p className="text-sm font-semibold opacity-90">{shift.name}</p>
-                      </div>
-                  );
-              })}
-               <div className="p-3 rounded-lg bg-teal-600 text-white">
-                  <p className="font-bold text-2xl">{annualDaysWorked}</p>
-                  <p className="text-sm font-semibold opacity-90">Días Completos</p>
-              </div>
+                {annualDisplayStats.map((stat) => {
+                    // Fix: This comparison is now valid due to the corrected union type
+                    if (stat.type === 'total') {
+                        return (
+                            <div key="total" className="p-3 rounded-lg bg-teal-600 text-white">
+                                <p className="font-bold text-2xl">{stat.count}</p>
+                                <p className="text-sm font-semibold opacity-90">Días con Turnos</p>
+                            </div>
+                        );
+                    }
+                    const { shift, count } = stat;
+                    if (!shift) return null;
+                    return (
+                        <div key={shift.id} className={`p-3 rounded-lg ${shift.color} text-white`}>
+                            <p className="font-bold text-2xl">{count}</p>
+                            <p className="text-sm font-semibold opacity-90">{shift.name}</p>
+                        </div>
+                    );
+                })}
             </div>
           )
         ) : (
@@ -185,14 +232,14 @@ const StatisticsView: React.FC = () => {
       {viewMode === 'monthly' && (
         <div className="grid grid-cols-2 gap-4">
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg text-center">
-               <h3 className="text-lg font-semibold mb-2 text-cyan-600 dark:text-cyan-400">Días Completos</h3>
+               <h3 className="text-lg font-semibold mb-2 text-cyan-600 dark:text-cyan-400">Días con Turnos</h3>
                <p className="text-5xl font-bold">{monthlyDaysWorked}</p>
-               <p className="text-sm text-gray-500 dark:text-gray-400">(Mes)</p>
+               <p className="text-sm text-gray-500 dark:text-gray-400">(en el mes)</p>
             </div>
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
                 <h3 className="text-lg font-semibold mb-2 text-center text-cyan-600 dark:text-cyan-400">Combinaciones</h3>
                 <div className="max-h-24 overflow-y-auto pr-2 text-xs">
-                    {monthlyShiftCombinations.length > 0 && monthlyShiftCombinations.some(c => c[1]>0) ? (
+                    {monthlyShiftCombinations.length > 0 ? (
                       <table className="w-full text-left">
                           <tbody>
                               {monthlyShiftCombinations.map(([combo, count]) => (

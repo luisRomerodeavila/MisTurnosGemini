@@ -1,7 +1,7 @@
 
 import React, { forwardRef } from 'react';
-import { Shift, AssignedShifts } from '../types';
-import { getDaysInMonth, formatToYYYYMMDD } from '../utils/dateUtils';
+import { Shift, AssignedShifts } from '../types.ts';
+import { getDaysInMonth, formatToYYYYMMDD } from '../utils/dateUtils.ts';
 
 interface ExportViewProps {
   currentDate: Date;

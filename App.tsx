@@ -1,15 +1,18 @@
 
 
+
+
+
 import React, { useState, useEffect, useMemo } from 'react';
-import BottomNav from './components/BottomNav';
-import CalendarView from './components/CalendarView';
-import StatisticsView from './components/StatisticsView';
-import SettingsView from './components/SettingsView';
-import { Page } from './types';
-import CalendarSwitcher from './components/CalendarSwitcher';
-import { useAppContext } from './contexts/AppContext';
-import { formatToYYYYMMDD } from './utils/dateUtils';
-import { getHexColor } from './utils/colorUtils';
+import BottomNav from './components/BottomNav.tsx';
+import CalendarView from './components/CalendarView.tsx';
+import StatisticsView from './components/StatisticsView.tsx';
+import SettingsView from './components/SettingsView.tsx';
+import { Page } from './types.ts';
+import CalendarSwitcher from './components/CalendarSwitcher.tsx';
+import { useAppContext } from './contexts/AppContext.tsx';
+import { formatToYYYYMMDD } from './utils/dateUtils.ts';
+import { getHexColor } from './utils/colorUtils.ts';
 
 
 const App: React.FC = () => {
@@ -167,7 +170,6 @@ const App: React.FC = () => {
                         new Notification('Recordatorio de Turno', {
                             body: `Tu turno "${shift.name}" comienza en 15 minutos, a las ${shiftStartTimeString}.`,
                             icon: icon,
-                            // FIX: Use `todayKey` which is defined in this scope, instead of the undefined `dateKey`.
                             tag: `shift-notification-${todayKey}-${shiftId}` // Prevent duplicate notifications
                         });
                     }

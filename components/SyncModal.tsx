@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useAppContext } from '../contexts/AppContext';
+import { useAppContext } from '../contexts/AppContext.tsx';
 import { Copy, Check, UploadCloud } from 'lucide-react';
 
 interface SyncModalProps {

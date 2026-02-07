@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Shift } from '../types';
-import { ICONS } from '../constants';
+import { Shift } from '../types.ts';
+import { ICONS } from '../constants.tsx';
 import { XCircle } from 'lucide-react';
 
 interface PaintBarProps {

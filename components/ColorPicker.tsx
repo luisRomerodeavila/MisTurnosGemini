@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AVAILABLE_COLORS } from '../constants';
+import { AVAILABLE_COLORS } from '../constants.tsx';
 
 interface ColorPickerProps {
   selectedColor: string;
