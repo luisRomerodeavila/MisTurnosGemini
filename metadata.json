@@ -1,0 +1,5 @@
+{
+  "name": "MisTurnos",
+  "description": "An application to manage your work shifts. It features a monthly calendar to assign shifts, a settings section to customize shift types with colors and icons, and a statistics view to track your work patterns monthly and annually.",
+  "requestFramePermissions": []
+}
