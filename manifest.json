@@ -3,7 +3,7 @@
   "name": "MisTurnos",
   "short_name": "MisTurnos",
   "description": "Una aplicación para gestionar tus turnos de trabajo. Cuenta con un calendario mensual para asignar turnos, una sección de ajustes para personalizar los tipos de turno con colores e iconos, y una vista de estadísticas para seguir tus patrones de trabajo mensual y anualmente.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#06b6d4",

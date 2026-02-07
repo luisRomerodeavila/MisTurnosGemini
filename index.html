@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
   
   <style>
@@ -37,15 +37,14 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white antialiased">
   <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+  <script type="module" src="index.tsx"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+        navigator.serviceWorker.register('service-worker.js').then(registration => {
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, err => {
           console.log('ServiceWorker registration failed: ', err);
